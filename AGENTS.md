@@ -8,3 +8,5 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Mock content lives in src/lib/data.ts and app state (saved, language, panels) in src/lib/store.tsx — keeps UI swappable for real KURA data later.
