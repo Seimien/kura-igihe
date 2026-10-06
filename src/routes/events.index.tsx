@@ -3,7 +3,7 @@ import { PageShell } from "@/components/PageShell";
 import { SaveButton } from "@/components/SaveButton";
 import { events, fmtDate } from "@/lib/data";
 
-export const Route = createFileRoute("/events")({
+export const Route = createFileRoute("/events/")({
   head: () => ({
     meta: [
       { title: "Events — What's happening | KURA" },

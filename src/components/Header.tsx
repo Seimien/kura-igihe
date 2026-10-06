@@ -1,6 +1,6 @@
-import { Link, useLocation } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { Bookmark, Menu, Search, X } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import logo from "@/assets/kura-logo.png.asset.json";
 import { copy, useApp } from "@/lib/store";
 import { events, opportunities, stories, trendingStory, closingSoon } from "@/lib/data";
@@ -9,27 +9,16 @@ import { cn } from "@/lib/utils";
 export function Header() {
   const { lang, setLang, saved, setPanel } = useApp();
   const t = copy[lang];
-  const { pathname } = useLocation();
-  const [solid, setSolid] = useState(pathname !== "/");
   const [q, setQ] = useState("");
   const [menu, setMenu] = useState(false);
-
-  useEffect(() => {
-    if (pathname !== "/") return setSolid(true);
-    const hero = document.getElementById("hero");
-    if (!hero) return;
-    const io = new IntersectionObserver(([e]) => setSolid(!e?.isIntersecting), { rootMargin: "-80px 0px 0px 0px", threshold: 0 });
-    io.observe(hero);
-    return () => io.disconnect();
-  }, [pathname]);
 
   const results = useMemo(() => {
     const s = q.trim().toLowerCase();
     if (s.length < 2) return [];
     const all = [
-      ...[trendingStory, ...stories].map((x) => ({ id: x.id, title: x.title, kind: "Story", to: "/inspired" as const })),
-      ...[closingSoon, ...opportunities].map((x) => ({ id: x.id, title: x.title, kind: x.type, to: "/opportunities" as const })),
-      ...events.map((x) => ({ id: x.id, title: x.title, kind: "Event", to: "/events" as const })),
+      ...[trendingStory, ...stories].map((x) => ({ id: x.id, title: x.title, kind: "Story", to: "/inspired/$id" as const })),
+      ...[closingSoon, ...opportunities].map((x) => ({ id: x.id, title: x.title, kind: x.type, to: "/opportunities/$id" as const })),
+      ...events.map((x) => ({ id: x.id, title: x.title, kind: "Event", to: "/events/$id" as const })),
     ];
     return all.filter((r) => (r.title + r.kind).toLowerCase().includes(s)).slice(0, 6);
   }, [q]);
@@ -41,12 +30,12 @@ export function Header() {
     { to: "/help" as const, label: t.help },
   ];
 
-  const onRed = solid;
+  const onRed = false;
   return (
     <header
       className={cn(
         "fixed inset-x-0 top-0 z-40 transition-[background-color,backdrop-filter,box-shadow] duration-500",
-        solid ? "bg-primary shadow-md" : "bg-background/30 backdrop-blur-md",
+        "border-b border-border/50 bg-background/60 backdrop-blur-md",
       )}
     >
       <div className="mx-auto grid h-16 max-w-[1440px] grid-cols-[auto_1fr_auto] items-center gap-4 px-4 lg:grid-cols-3 lg:px-8">
@@ -62,7 +51,7 @@ export function Header() {
               <li key={n.to}>
                 <Link
                   to={n.to}
-                  className="label-micro text-primary-foreground/85 transition-colors hover:text-primary-foreground data-[status=active]:text-primary-foreground data-[status=active]:underline data-[status=active]:underline-offset-8"
+                  className="label-micro text-foreground/80 transition-colors hover:text-primary data-[status=active]:text-primary data-[status=active]:underline data-[status=active]:underline-offset-8"
                 >
                   {n.label}
                 </Link>
@@ -99,7 +88,7 @@ export function Header() {
                   <p className="p-3 text-sm text-muted-foreground">No results for “{q}”.</p>
                 ) : (
                   results.map((r) => (
-                    <Link key={r.id} to={r.to} onClick={() => setQ("")} className="block rounded-sm p-2.5 hover:bg-muted">
+                    <Link key={r.id} to={r.to} params={{ id: r.id }} onClick={() => setQ("")} className="block rounded-sm p-2.5 hover:bg-muted">
                       <span className="label-micro text-primary">{r.kind}</span>
                       <span className="mt-0.5 block text-sm font-semibold leading-snug">{r.title}</span>
                     </Link>

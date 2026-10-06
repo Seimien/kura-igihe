@@ -3,7 +3,7 @@ import { PageShell } from "@/components/PageShell";
 import { SaveButton } from "@/components/SaveButton";
 import { closingSoon, fmtDate, opportunities } from "@/lib/data";
 
-export const Route = createFileRoute("/opportunities")({
+export const Route = createFileRoute("/opportunities/")({
   head: () => ({
     meta: [
       { title: "Opportunities — Jobs, scholarships & grants | KURA" },

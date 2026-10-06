@@ -3,7 +3,7 @@ import { PageShell } from "@/components/PageShell";
 import { SaveButton } from "@/components/SaveButton";
 import { stories, trendingStory } from "@/lib/data";
 
-export const Route = createFileRoute("/inspired")({
+export const Route = createFileRoute("/inspired/")({
   head: () => ({
     meta: [
       { title: "Inspired — Stories of young Rwandans | KURA" },
