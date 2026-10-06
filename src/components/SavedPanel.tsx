@@ -19,7 +19,7 @@ export function SavedPanel() {
     <Sheet open={panel !== null} onOpenChange={(o) => !o && setPanel(null)}>
       <SheetContent className="w-full overflow-y-auto bg-paper sm:max-w-md">
         <SheetHeader>
-          <SheetTitle className="font-display text-3xl font-bold uppercase">Saved & Reminders</SheetTitle>
+          <SheetTitle className="text-2xl font-bold">Saved & Reminders</SheetTitle>
         </SheetHeader>
         <div role="tablist" className="mx-4 flex border-b">
           {(["saved", "alerts"] as const).map((t) => (
