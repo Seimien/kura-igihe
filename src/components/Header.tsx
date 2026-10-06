@@ -18,7 +18,7 @@ export function Header() {
     if (pathname !== "/") return setSolid(true);
     const hero = document.getElementById("hero");
     if (!hero) return;
-    const io = new IntersectionObserver(([e]) => setSolid(!e.isIntersecting), { rootMargin: "-80px 0px 0px 0px", threshold: 0 });
+    const io = new IntersectionObserver(([e]) => setSolid(!e?.isIntersecting), { rootMargin: "-80px 0px 0px 0px", threshold: 0 });
     io.observe(hero);
     return () => io.disconnect();
   }, [pathname]);
