@@ -1,0 +1,27 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { PageShell } from "@/components/PageShell";
+import { helpResources } from "@/lib/data";
+
+export const Route = createFileRoute("/help")({
+  head: () => ({
+    meta: [
+      { title: "Get help — Trusted support | KURA" },
+      { name: "description", content: "Confidential, trusted resources and organisations for young people." },
+      { property: "og:title", content: "Get help — KURA" },
+      { property: "og:description", content: "Confidential, trusted resources and organisations for young people." },
+    ],
+  }),
+  component: () => (
+    <PageShell kicker="Help" title="Get help" intro="You don't need to explain anything. Choose what feels closest — everything here is private.">
+      <div className="grid gap-4 md:grid-cols-2">
+        {helpResources.map((h) => (
+          <article key={h.id} className="border bg-card p-6">
+            <h2 className="text-lg font-bold">{h.name}</h2>
+            <p className="mt-1 text-muted-foreground">{h.desc}</p>
+          </article>
+        ))}
+      </div>
+      <p className="mt-8 text-sm text-muted-foreground">In an emergency in Rwanda, call <strong className="text-foreground">112</strong>. Free youth helpline: <strong className="text-foreground">114</strong>.</p>
+    </PageShell>
+  ),
+});
