@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "@tanstack/react-router";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useApp } from "@/lib/store";
 import { cn } from "@/lib/utils";
@@ -18,7 +19,7 @@ export function SavedPanel() {
     <Sheet open={panel !== null} onOpenChange={(o) => !o && setPanel(null)}>
       <SheetContent className="w-full overflow-y-auto bg-paper sm:max-w-md">
         <SheetHeader>
-          <SheetTitle className="font-display text-3xl font-bold uppercase">Saved & Reminders</SheetTitle>
+          <SheetTitle className="text-2xl font-bold">Saved & Reminders</SheetTitle>
         </SheetHeader>
         <div role="tablist" className="mx-4 flex border-b">
           {(["saved", "alerts"] as const).map((t) => (
@@ -59,7 +60,14 @@ export function SavedPanel() {
                       </div>
                     )}
                     <div className="mt-2 flex gap-3 text-sm font-semibold">
-                      <button className="text-primary hover:underline">Open</button>
+                      <Link
+                        to={s.kind === "story" ? "/inspired/$id" : s.kind === "event" ? "/events/$id" : "/opportunities/$id"}
+                        params={{ id: s.id }}
+                        onClick={() => setPanel(null)}
+                        className="text-primary hover:underline"
+                      >
+                        Open
+                      </Link>
                       <button onClick={() => remove(s.id)} className="text-muted-foreground hover:underline">Remove</button>
                     </div>
                   </li>

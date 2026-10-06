@@ -121,3 +121,25 @@ export function daysLeft(iso: string) {
 export function fmtDate(iso: string) {
   return new Date(iso).toLocaleDateString("en-GB", { day: "2-digit", month: "short" });
 }
+
+export const allStories: Story[] = [trendingStory, ...stories];
+export const allOpportunities: Opportunity[] = [closingSoon, ...opportunities];
+
+export function storyBody(s: Story): string[] {
+  return [
+    s.summary,
+    "When we first met, the conversation kept returning to one idea: start before you feel ready. The early months were full of small setbacks — missed deadlines, unanswered emails, and long evenings figuring things out alone.",
+    "What changed everything was community. A mentor, a few friends who believed in the idea, and a willingness to ask for help turned an uncertain plan into something real and sustainable.",
+    "Today the focus is on opening doors for others. “If you are young and ambitious, don't wait for permission. Learn in public, share what you build, and keep showing up.”",
+  ];
+}
+export function opportunityDetails(o: Opportunity) {
+  return {
+    about: `${o.organisation} is offering the ${o.title} for motivated young people. This ${o.type.toLowerCase()} is verified by the KURA team.`,
+    requirements: [o.eligibility, "Rwandan citizen or resident", "Strong motivation and clear goals", "Updated CV and short motivation letter"],
+    howToApply: "Prepare your documents, complete the online form on the organisation's website, and submit before the deadline. Late applications are not accepted.",
+  };
+}
+export function eventDetails(e: EventItem) {
+  return `${e.title} brings together young people, employers and mentors for a day of learning, networking and practical sessions. Entry is free, but places are limited — register early to secure your spot.`;
+}

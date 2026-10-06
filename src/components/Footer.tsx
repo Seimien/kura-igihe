@@ -28,7 +28,7 @@ export function Footer() {
           <span className={a}>Privacy · Terms</span>
         </div>
         <div>
-          <h2 className="font-display text-3xl font-bold uppercase leading-none">Stay in the loop.</h2>
+          <h2 className="text-2xl font-bold leading-tight">Stay in the loop.</h2>
           <p className="mt-3 text-sm text-navy-foreground/75">Get new opportunities, events and stories that match your interests.</p>
           <button onClick={() => setPanel("alerts")} className="mt-5 bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90">
             Get alerts →

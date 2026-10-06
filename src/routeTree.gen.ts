@@ -11,10 +11,13 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
-import { Route as EventsRouteImport } from './routes/events'
 import { Route as HelpRouteImport } from './routes/help'
-import { Route as InspiredRouteImport } from './routes/inspired'
-import { Route as OpportunitiesRouteImport } from './routes/opportunities'
+import { Route as EventsIndexRouteImport } from './routes/events.index'
+import { Route as EventsIdRouteImport } from './routes/events.$id'
+import { Route as InspiredIndexRouteImport } from './routes/inspired.index'
+import { Route as InspiredIdRouteImport } from './routes/inspired.$id'
+import { Route as OpportunitiesIndexRouteImport } from './routes/opportunities.index'
+import { Route as OpportunitiesIdRouteImport } from './routes/opportunities.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -26,75 +29,122 @@ const AboutRoute = AboutRouteImport.update({
   path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
-const EventsRoute = EventsRouteImport.update({
-  id: '/events',
-  path: '/events',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const HelpRoute = HelpRouteImport.update({
   id: '/help',
   path: '/help',
   getParentRoute: () => rootRouteImport,
 } as any)
-const InspiredRoute = InspiredRouteImport.update({
-  id: '/inspired',
-  path: '/inspired',
+const EventsIndexRoute = EventsIndexRouteImport.update({
+  id: '/events/',
+  path: '/events/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const OpportunitiesRoute = OpportunitiesRouteImport.update({
-  id: '/opportunities',
-  path: '/opportunities',
+const EventsIdRoute = EventsIdRouteImport.update({
+  id: '/events/$id',
+  path: '/events/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InspiredIndexRoute = InspiredIndexRouteImport.update({
+  id: '/inspired/',
+  path: '/inspired/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InspiredIdRoute = InspiredIdRouteImport.update({
+  id: '/inspired/$id',
+  path: '/inspired/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OpportunitiesIndexRoute = OpportunitiesIndexRouteImport.update({
+  id: '/opportunities/',
+  path: '/opportunities/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OpportunitiesIdRoute = OpportunitiesIdRouteImport.update({
+  id: '/opportunities/$id',
+  path: '/opportunities/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/events': typeof EventsRoute
   '/help': typeof HelpRoute
-  '/inspired': typeof InspiredRoute
-  '/opportunities': typeof OpportunitiesRoute
+  '/events/$id': typeof EventsIdRoute
+  '/inspired/$id': typeof InspiredIdRoute
+  '/opportunities/$id': typeof OpportunitiesIdRoute
+  '/events/': typeof EventsIndexRoute
+  '/inspired/': typeof InspiredIndexRoute
+  '/opportunities/': typeof OpportunitiesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/events': typeof EventsRoute
   '/help': typeof HelpRoute
-  '/inspired': typeof InspiredRoute
-  '/opportunities': typeof OpportunitiesRoute
+  '/events/$id': typeof EventsIdRoute
+  '/inspired/$id': typeof InspiredIdRoute
+  '/opportunities/$id': typeof OpportunitiesIdRoute
+  '/events': typeof EventsIndexRoute
+  '/inspired': typeof InspiredIndexRoute
+  '/opportunities': typeof OpportunitiesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/events': typeof EventsRoute
   '/help': typeof HelpRoute
-  '/inspired': typeof InspiredRoute
-  '/opportunities': typeof OpportunitiesRoute
+  '/events/$id': typeof EventsIdRoute
+  '/inspired/$id': typeof InspiredIdRoute
+  '/opportunities/$id': typeof OpportunitiesIdRoute
+  '/events/': typeof EventsIndexRoute
+  '/inspired/': typeof InspiredIndexRoute
+  '/opportunities/': typeof OpportunitiesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/about' | '/events' | '/help' | '/inspired' | '/opportunities'
+    | '/'
+    | '/about'
+    | '/help'
+    | '/events/$id'
+    | '/inspired/$id'
+    | '/opportunities/$id'
+    | '/events/'
+    | '/inspired/'
+    | '/opportunities/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/events' | '/help' | '/inspired' | '/opportunities'
+  to:
+    | '/'
+    | '/about'
+    | '/help'
+    | '/events/$id'
+    | '/inspired/$id'
+    | '/opportunities/$id'
+    | '/events'
+    | '/inspired'
+    | '/opportunities'
   id:
     | '__root__'
     | '/'
     | '/about'
-    | '/events'
     | '/help'
-    | '/inspired'
-    | '/opportunities'
+    | '/events/$id'
+    | '/inspired/$id'
+    | '/opportunities/$id'
+    | '/events/'
+    | '/inspired/'
+    | '/opportunities/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
-  EventsRoute: typeof EventsRoute
   HelpRoute: typeof HelpRoute
-  InspiredRoute: typeof InspiredRoute
-  OpportunitiesRoute: typeof OpportunitiesRoute
+  EventsIdRoute: typeof EventsIdRoute
+  InspiredIdRoute: typeof InspiredIdRoute
+  OpportunitiesIdRoute: typeof OpportunitiesIdRoute
+  EventsIndexRoute: typeof EventsIndexRoute
+  InspiredIndexRoute: typeof InspiredIndexRoute
+  OpportunitiesIndexRoute: typeof OpportunitiesIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -113,13 +163,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/events': {
-      id: '/events'
-      path: '/events'
-      fullPath: '/events'
-      preLoaderRoute: typeof EventsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/help': {
       id: '/help'
       path: '/help'
@@ -127,18 +170,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HelpRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/inspired': {
-      id: '/inspired'
-      path: '/inspired'
-      fullPath: '/inspired'
-      preLoaderRoute: typeof InspiredRouteImport
+    '/events/': {
+      id: '/events/'
+      path: '/events'
+      fullPath: '/events/'
+      preLoaderRoute: typeof EventsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/opportunities': {
-      id: '/opportunities'
+    '/events/$id': {
+      id: '/events/$id'
+      path: '/events/$id'
+      fullPath: '/events/$id'
+      preLoaderRoute: typeof EventsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/inspired/': {
+      id: '/inspired/'
+      path: '/inspired'
+      fullPath: '/inspired/'
+      preLoaderRoute: typeof InspiredIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/inspired/$id': {
+      id: '/inspired/$id'
+      path: '/inspired/$id'
+      fullPath: '/inspired/$id'
+      preLoaderRoute: typeof InspiredIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/opportunities/': {
+      id: '/opportunities/'
       path: '/opportunities'
-      fullPath: '/opportunities'
-      preLoaderRoute: typeof OpportunitiesRouteImport
+      fullPath: '/opportunities/'
+      preLoaderRoute: typeof OpportunitiesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/opportunities/$id': {
+      id: '/opportunities/$id'
+      path: '/opportunities/$id'
+      fullPath: '/opportunities/$id'
+      preLoaderRoute: typeof OpportunitiesIdRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -147,10 +218,13 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
-  EventsRoute: EventsRoute,
   HelpRoute: HelpRoute,
-  InspiredRoute: InspiredRoute,
-  OpportunitiesRoute: OpportunitiesRoute,
+  EventsIdRoute: EventsIdRoute,
+  InspiredIdRoute: InspiredIdRoute,
+  OpportunitiesIdRoute: OpportunitiesIdRoute,
+  EventsIndexRoute: EventsIndexRoute,
+  InspiredIndexRoute: InspiredIndexRoute,
+  OpportunitiesIndexRoute: OpportunitiesIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
