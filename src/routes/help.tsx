@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PageShell } from "@/components/PageShell";
 import { helpResources } from "@/lib/data";
+import { useT } from "@/lib/i18n";
 
 export const Route = createFileRoute("/help")({
   head: () => ({
@@ -11,17 +12,22 @@ export const Route = createFileRoute("/help")({
       { property: "og:description", content: "Confidential, trusted resources and organisations for young people." },
     ],
   }),
-  component: () => (
+  component: HelpPage,
+});
+
+function HelpPage() {
+  const t = useT();
+  return (
     <PageShell kicker="Help" title="Get help" intro="You don't need to explain anything. Choose what feels closest — everything here is private.">
       <div className="grid gap-4 md:grid-cols-2">
         {helpResources.map((h) => (
           <article key={h.id} className="border bg-card p-6">
-            <h2 className="text-lg font-bold">{h.name}</h2>
-            <p className="mt-1 text-muted-foreground">{h.desc}</p>
+            <h2 className="text-lg font-bold">{t(h.name)}</h2>
+            <p className="mt-1 text-muted-foreground">{t(h.desc)}</p>
           </article>
         ))}
       </div>
-      <p className="mt-8 text-sm text-muted-foreground">In an emergency in Rwanda, call <strong className="text-foreground">112</strong>. Free youth helpline: <strong className="text-foreground">114</strong>.</p>
+      <p className="mt-8 text-sm text-muted-foreground">{t("In an emergency in Rwanda, call")} <strong className="text-foreground">112</strong>. {t("Free youth helpline:")} <strong className="text-foreground">114</strong>.</p>
     </PageShell>
-  ),
-});
+  );
+}

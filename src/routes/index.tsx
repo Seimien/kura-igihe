@@ -3,8 +3,10 @@ import { ArrowRight, BadgeCheck, MapPin, Play } from "lucide-react";
 import { useRef, useState } from "react";
 import { ShareButton } from "@/components/ShareButton";
 import { SaveButton } from "@/components/SaveButton";
-import { closingSoon, daysLeft, events, fmtDate, opportunities, stories, trendingStory } from "@/lib/data";
+import { closingSoon, daysLeft, events, opportunities, stories, trendingStory } from "@/lib/data";
 import { cn } from "@/lib/utils";
+import { fmtDateL, monthShort, storyDate, useT } from "@/lib/i18n";
+import { useApp } from "@/lib/store";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -34,6 +36,8 @@ function Home() {
 function Hero() {
   const { days, hrs } = daysLeft(closingSoon.deadline);
   const urgent = days <= 7;
+  const t = useT();
+  const { lang } = useApp();
   const ref = useRef<HTMLDivElement>(null);
   const [slide, setSlide] = useState(0);
   const onScroll = () => {
@@ -55,19 +59,19 @@ function Hero() {
         <div className="flex w-full shrink-0 snap-center flex-col justify-center px-6 py-8 lg:px-10">
           <p className="label-micro text-primary">KURA</p>
           <h1 className="mt-4 text-4xl font-extrabold leading-[1.05] tracking-tight text-foreground xl:text-5xl">
-            The bridge between youth, the future and <span className="text-primary">ambition.</span>
+            {t("The bridge between youth, the future and")}{lang === "EN" ? " " : ""}<span className="text-primary">{t("ambition.")}</span>
           </h1>
           <p className="mt-5 max-w-sm text-base leading-relaxed text-muted-foreground">
-            Verified stories, scholarships, jobs and events for young people in Rwanda — all in one place.
+            {t("Verified stories, scholarships, jobs and events for young people in Rwanda — all in one place.")}
           </p>
           <Link to="/about" className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-foreground hover:text-primary">
-            Explore KURA <ArrowRight className="h-4 w-4" />
+            {t("Explore KURA")} <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
 
         {/* CENTER — Story */}
         <article className="relative flex w-full shrink-0 snap-center flex-col bg-primary text-primary-foreground lg:mt-0">
-          <Link to="/inspired/$id" params={{ id: trendingStory.id }} aria-label={trendingStory.title} className="absolute inset-0">
+          <Link to="/inspired/$id" params={{ id: trendingStory.id }} aria-label={t(trendingStory.title)} className="absolute inset-0">
             <img
               src={trendingStory.image}
               alt=""
@@ -78,15 +82,15 @@ function Hero() {
           </Link>
           <div className="pointer-events-none relative mt-auto bg-gradient-to-t from-primary via-primary/95 to-transparent px-6 pb-6 pt-20 lg:px-8">
             <p className="label-micro">
-              <span className="bg-primary-foreground px-1.5 py-0.5 text-primary">Trending</span>
-              <span className="ml-2 opacity-90">{trendingStory.category}</span>
+              <span className="bg-primary-foreground px-1.5 py-0.5 text-primary">{t("Trending")}</span>
+              <span className="ml-2 opacity-90">{t(trendingStory.category)}</span>
             </p>
-            <h2 className="mt-3 text-2xl font-bold leading-tight xl:text-3xl">{trendingStory.title}</h2>
-            <p className="mt-2 line-clamp-2 text-sm opacity-90">{trendingStory.summary}</p>
+            <h2 className="mt-3 text-2xl font-bold leading-tight xl:text-3xl">{t(trendingStory.title)}</h2>
+            <p className="mt-2 line-clamp-2 text-sm opacity-90">{t(trendingStory.summary)}</p>
             <div className="pointer-events-auto mt-4 flex flex-wrap gap-2">
-              <Link to="/inspired/$id" params={{ id: trendingStory.id }} className="bg-primary-foreground px-4 py-2 text-sm font-semibold text-primary hover:bg-primary-foreground/90">Read story</Link>
+              <Link to="/inspired/$id" params={{ id: trendingStory.id }} className="bg-primary-foreground px-4 py-2 text-sm font-semibold text-primary hover:bg-primary-foreground/90">{t("Read story")}</Link>
               <a href={trendingStory.youtubeUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 border border-primary-foreground/60 px-4 py-2 text-sm font-semibold hover:bg-primary-foreground/10">
-                <Play className="h-3.5 w-3.5 fill-current" /> Watch
+                <Play className="h-3.5 w-3.5 fill-current" /> {t("Watch")}
               </a>
               <ShareButton title={trendingStory.title} path={`/inspired/${trendingStory.id}`} label={false} className="border-primary-foreground/60 text-primary-foreground hover:border-primary-foreground" />
             </div>
@@ -97,30 +101,30 @@ function Hero() {
         <aside className="flex w-full shrink-0 snap-center flex-col justify-center px-6 py-8 lg:px-10">
           <p className="label-micro">
             <span className={cn("px-1.5 py-0.5", urgent ? "bg-highlight text-highlight-foreground" : "bg-navy text-navy-foreground")}>
-              {urgent ? "Closing soon" : "Just added"}
+              {urgent ? t("Closing soon") : t("Just added")}
             </span>
-            <span className="ml-2 text-muted-foreground">· {closingSoon.type}</span>
+            <span className="ml-2 text-muted-foreground">· {t(closingSoon.type)}</span>
           </p>
           <Link to="/opportunities/$id" params={{ id: closingSoon.id }} className="hover:text-primary">
-            <h2 className="mt-4 text-2xl font-bold leading-tight xl:text-3xl">{closingSoon.title}</h2>
+            <h2 className="mt-4 text-2xl font-bold leading-tight xl:text-3xl">{t(closingSoon.title)}</h2>
           </Link>
           <p className="mt-2 flex items-center gap-1.5 text-sm text-muted-foreground">
             {closingSoon.organisation}
-            {closingSoon.verified && <BadgeCheck className="h-4 w-4 text-primary" aria-label="Verified" />}
+            {closingSoon.verified && <BadgeCheck className="h-4 w-4 text-primary" aria-label={t("Verified")} />}
           </p>
           <div className="mt-6 flex items-end gap-6 border-y py-4">
             <div>
               <span className="text-5xl font-extrabold leading-none" suppressHydrationWarning>{String(days).padStart(2, "0")}</span>
-              <span className="label-micro ml-1 text-muted-foreground">Days</span>
+              <span className="label-micro ml-1 text-muted-foreground">{t("Days")}</span>
             </div>
             <div>
               <span className="text-5xl font-extrabold leading-none" suppressHydrationWarning>{String(hrs).padStart(2, "0")}</span>
-              <span className="label-micro ml-1 text-muted-foreground">Hrs</span>
+              <span className="label-micro ml-1 text-muted-foreground">{t("Hrs")}</span>
             </div>
-            <span className="ml-auto text-xs text-muted-foreground" suppressHydrationWarning>Deadline {fmtDate(closingSoon.deadline)}</span>
+            <span className="ml-auto text-xs text-muted-foreground" suppressHydrationWarning>{t("Deadline")} {fmtDateL(closingSoon.deadline, lang)}</span>
           </div>
           <div className="mt-5 flex flex-wrap gap-2">
-            <Link to="/opportunities/$id" params={{ id: closingSoon.id }} className="bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary/90">Apply</Link>
+            <Link to="/opportunities/$id" params={{ id: closingSoon.id }} className="bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary/90">{t("Apply")}</Link>
             <SaveButton item={{ id: closingSoon.id, kind: "opportunity", title: closingSoon.title, meta: closingSoon.type }} />
             <ShareButton title={closingSoon.title} path={`/opportunities/${closingSoon.id}`} label={false} />
           </div>
@@ -128,13 +132,13 @@ function Hero() {
       </div>
 
       {/* mobile slide dots */}
-      <div className="relative flex justify-center gap-2 pb-5 pt-3 lg:hidden" role="tablist" aria-label="Hero slides">
+      <div className="relative flex justify-center gap-2 pb-5 pt-3 lg:hidden" role="tablist" aria-label={t("Hero slides")}>
         {["Brief", "Story", "Closing soon"].map((l, i) => (
           <button
             key={l}
             role="tab"
             aria-selected={slide === i}
-            aria-label={l}
+            aria-label={t(l)}
             onClick={() => go(i)}
             className={cn("h-2 rounded-full transition-all", slide === i ? "w-8 bg-primary" : "w-2 bg-foreground/25")}
           />
@@ -145,15 +149,16 @@ function Hero() {
 }
 
 function SectionHead({ kicker, title, to, cta }: { kicker: string; title: string; to?: "/opportunities" | "/inspired" | "/events"; cta?: string }) {
+  const t = useT();
   return (
     <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
       <div>
-        <p className="label-micro text-primary">{kicker}</p>
-        <h2 className="mt-2 text-3xl font-extrabold leading-none md:text-4xl">{title}</h2>
+        <p className="label-micro text-primary">{t(kicker)}</p>
+        <h2 className="mt-2 text-3xl font-extrabold leading-none md:text-4xl">{t(title)}</h2>
       </div>
       {to && (
         <Link to={to} className="inline-flex items-center gap-1.5 text-sm font-semibold hover:text-primary">
-          {cta} <ArrowRight className="h-4 w-4" />
+          {cta && t(cta)} <ArrowRight className="h-4 w-4" />
         </Link>
       )}
     </div>
@@ -161,17 +166,18 @@ function SectionHead({ kicker, title, to, cta }: { kicker: string; title: string
 }
 
 function WhyKura() {
+  const t = useT();
   return (
     <section className="border-b bg-paper">
       <div className="mx-auto max-w-[1440px] px-6 py-16 lg:px-10">
-        <p className="label-micro text-primary">Why KURA</p>
+        <p className="label-micro text-primary">{t("Why KURA")}</p>
         <blockquote className="mt-3 max-w-4xl text-2xl font-bold leading-snug md:text-3xl">
-          “Your definition of success will differ from other people’s personal goals, but you must remember that you are on different paths.”
+          {t("“Your definition of success will differ from other people’s personal goals, but you must remember that you are on different paths.”")}
         </blockquote>
         <p className="label-micro mt-4 text-muted-foreground">— KURA</p>
         <div className="mt-6 flex flex-wrap items-center gap-6 text-sm">
-          <span className="text-muted-foreground">In partnership with <strong className="text-foreground">Mastercard Foundation</strong></span>
-          <Link to="/about" className="font-semibold text-primary hover:underline">How we verify →</Link>
+          <span className="text-muted-foreground">{t("In partnership with")} <strong className="text-foreground">Mastercard Foundation</strong></span>
+          <Link to="/about" className="font-semibold text-primary hover:underline">{t("How we verify →")}</Link>
         </div>
       </div>
     </section>
@@ -180,6 +186,8 @@ function WhyKura() {
 
 function Opportunities() {
   const list = [...opportunities].sort((a, b) => a.deadline.localeCompare(b.deadline)).slice(0, 3);
+  const t = useT();
+  const { lang } = useApp();
   return (
     <section id="opportunities" className="scroll-mt-20">
       <div className="mx-auto max-w-[1440px] px-6 py-16 lg:px-10">
@@ -190,21 +198,21 @@ function Opportunities() {
             return (
               <article key={o.id} className="flex flex-col border bg-card p-5 transition-shadow hover:shadow-md">
                 <div className="flex items-center justify-between">
-                  <span className="label-micro text-primary">{o.type}</span>
+                  <span className="label-micro text-primary">{t(o.type)}</span>
                   <span className={cn("label-micro px-1.5 py-0.5", d <= 7 ? "bg-highlight text-highlight-foreground" : "bg-muted text-muted-foreground")} suppressHydrationWarning>
-                    {d} days left
+                    {d} {t("days left")}
                   </span>
                 </div>
-                <h3 className="mt-3 text-lg font-bold leading-snug"><Link to="/opportunities/$id" params={{ id: o.id }} className="hover:text-primary">{o.title}</Link></h3>
+                <h3 className="mt-3 text-lg font-bold leading-snug"><Link to="/opportunities/$id" params={{ id: o.id }} className="hover:text-primary">{t(o.title)}</Link></h3>
                 <p className="mt-1 flex items-center gap-1 text-sm font-semibold text-muted-foreground">
-                  {o.organisation} {o.verified && <BadgeCheck className="h-4 w-4 text-primary" aria-label="Verified" />}
+                  {o.organisation} {o.verified && <BadgeCheck className="h-4 w-4 text-primary" aria-label={t("Verified")} />}
                 </p>
-                <p className="mt-3 flex items-center gap-1 text-sm text-muted-foreground"><MapPin className="h-3.5 w-3.5" /> {o.location} · {o.eligibility}</p>
+                <p className="mt-3 flex items-center gap-1 text-sm text-muted-foreground"><MapPin className="h-3.5 w-3.5" /> {t(o.location)} · {t(o.eligibility)}</p>
                 <div className="mt-5 flex items-center gap-2 border-t pt-4">
-                  <Link to="/opportunities/$id" params={{ id: o.id }} className="bg-primary px-4 py-1.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90">Apply</Link>
+                  <Link to="/opportunities/$id" params={{ id: o.id }} className="bg-primary px-4 py-1.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90">{t("Apply")}</Link>
                   <SaveButton item={{ id: o.id, kind: "opportunity", title: o.title, meta: o.type }} label={false} />
                   <ShareButton title={o.title} path={`/opportunities/${o.id}`} label={false} />
-                  <span className="ml-auto text-xs text-muted-foreground" suppressHydrationWarning>Closes {fmtDate(o.deadline)}</span>
+                  <span className="ml-auto text-xs text-muted-foreground" suppressHydrationWarning>{t("Closes")} {fmtDateL(o.deadline, lang)}</span>
                 </div>
               </article>
             );
@@ -217,6 +225,8 @@ function Opportunities() {
 }
 
 function Inspired() {
+  const t = useT();
+  const { lang } = useApp();
   return (
     <section id="inspired" className="scroll-mt-20 border-y bg-paper">
       <div className="mx-auto max-w-[1440px] px-6 py-16 lg:px-10">
@@ -225,21 +235,21 @@ function Inspired() {
           {stories.map((s) => (
             <article key={s.id} className="group flex flex-col">
               <div className="relative aspect-[4/3] overflow-hidden bg-muted">
-                <Link to="/inspired/$id" params={{ id: s.id }} aria-label={s.title}><img src={s.image} alt="" loading="lazy" width={1024} height={768} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" /></Link>
+                <Link to="/inspired/$id" params={{ id: s.id }} aria-label={t(s.title)}><img src={s.image} alt="" loading="lazy" width={1024} height={768} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" /></Link>
                 {s.youtubeUrl && (
                   <a href={s.youtubeUrl} target="_blank" rel="noreferrer" className="label-micro absolute bottom-3 left-3 inline-flex items-center gap-1.5 bg-primary px-2.5 py-1.5 text-primary-foreground">
-                    <Play className="h-3 w-3 fill-current" /> Watch story
+                    <Play className="h-3 w-3 fill-current" /> {t("Watch story")}
                   </a>
                 )}
               </div>
               <div className="mt-4 flex items-center justify-between">
-                <span className="label-micro text-primary">{s.category}</span>
-                <span className="text-xs text-muted-foreground">{s.date}</span>
+                <span className="label-micro text-primary">{t(s.category)}</span>
+                <span className="text-xs text-muted-foreground">{storyDate(s.date, lang)}</span>
               </div>
               <h3 className="mt-2 text-xl font-bold leading-snug group-hover:text-primary">
-                <Link to="/inspired/$id" params={{ id: s.id }}>{s.title}</Link>
+                <Link to="/inspired/$id" params={{ id: s.id }}>{t(s.title)}</Link>
               </h3>
-              <p className="mt-2 text-sm text-muted-foreground">{s.summary}</p>
+              <p className="mt-2 text-sm text-muted-foreground">{t(s.summary)}</p>
               <div className="mt-4 flex gap-2">
                 <SaveButton item={{ id: s.id, kind: "story", title: s.title, meta: s.category }} />
                 <ShareButton title={s.title} path={`/inspired/${s.id}`} />
@@ -253,6 +263,8 @@ function Inspired() {
 }
 
 function Events() {
+  const t = useT();
+  const { lang } = useApp();
   if (events.length < 3) return null;
   return (
     <section id="events" className="scroll-mt-20">
@@ -265,14 +277,14 @@ function Events() {
               <article key={e.id} className="flex border bg-card">
                 <div className="flex w-24 shrink-0 flex-col items-center justify-center bg-navy text-navy-foreground" suppressHydrationWarning>
                   <span className="text-3xl font-extrabold leading-none" suppressHydrationWarning>{d.getDate()}</span>
-                  <span className="label-micro mt-1" suppressHydrationWarning>{d.toLocaleDateString("en-GB", { month: "short" })}</span>
+                  <span className="label-micro mt-1" suppressHydrationWarning>{monthShort(e.date, lang)}</span>
                 </div>
                 <div className="flex flex-1 flex-col p-4">
-                  <span className="label-micro text-primary">{e.type}</span>
-                  <h3 className="mt-1 font-bold leading-snug"><Link to="/events/$id" params={{ id: e.id }} className="hover:text-primary">{e.title}</Link></h3>
-                  <p className="mt-1 flex items-center gap-1 text-sm text-muted-foreground"><MapPin className="h-3.5 w-3.5" /> {e.location}</p>
+                  <span className="label-micro text-primary">{t(e.type)}</span>
+                  <h3 className="mt-1 font-bold leading-snug"><Link to="/events/$id" params={{ id: e.id }} className="hover:text-primary">{t(e.title)}</Link></h3>
+                  <p className="mt-1 flex items-center gap-1 text-sm text-muted-foreground"><MapPin className="h-3.5 w-3.5" /> {t(e.location)}</p>
                   <div className="mt-3 flex items-center gap-2">
-                    <Link to="/events/$id" params={{ id: e.id }} className="text-sm font-semibold text-primary hover:underline">View event</Link>
+                    <Link to="/events/$id" params={{ id: e.id }} className="text-sm font-semibold text-primary hover:underline">{t("View event")}</Link>
                     <ShareButton className="ml-auto" title={e.title} path={`/events/${e.id}`} label={false} />
                     <SaveButton label={false} item={{ id: e.id, kind: "event", title: e.title, meta: e.type }} />
                   </div>
@@ -287,14 +299,15 @@ function Events() {
 }
 
 function HelpCta() {
+  const t = useT();
   return (
     <section className="border-t bg-secondary">
       <div className="mx-auto flex max-w-[1440px] flex-wrap items-center justify-between gap-6 px-6 py-12 lg:px-10">
         <div>
-          <h2 className="text-2xl font-bold">Need answers first?</h2>
-          <p className="mt-1 text-muted-foreground">Find trusted resources and organisations that can help.</p>
+          <h2 className="text-2xl font-bold">{t("Need answers first?")}</h2>
+          <p className="mt-1 text-muted-foreground">{t("Find trusted resources and organisations that can help.")}</p>
         </div>
-        <Link to="/help" className="bg-navy px-5 py-2.5 text-sm font-semibold text-navy-foreground hover:bg-navy/90">Get help →</Link>
+        <Link to="/help" className="bg-navy px-5 py-2.5 text-sm font-semibold text-navy-foreground hover:bg-navy/90">{t("Get help →")}</Link>
       </div>
     </section>
   );
