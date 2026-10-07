@@ -3,6 +3,7 @@ import { Bookmark, Menu, Search, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import logo from "@/assets/kura-logo.png.asset.json";
 import { copy, useApp } from "@/lib/store";
+import { translate } from "@/lib/i18n";
 import { events, opportunities, stories, trendingStory, closingSoon } from "@/lib/data";
 import { cn } from "@/lib/utils";
 
@@ -20,8 +21,8 @@ export function Header() {
       ...[closingSoon, ...opportunities].map((x) => ({ id: x.id, title: x.title, kind: x.type, to: "/opportunities/$id" as const })),
       ...events.map((x) => ({ id: x.id, title: x.title, kind: "Event", to: "/events/$id" as const })),
     ];
-    return all.filter((r) => (r.title + r.kind).toLowerCase().includes(s)).slice(0, 6);
-  }, [q]);
+    return all.filter((r) => (r.title + r.kind + translate(lang, r.title) + translate(lang, r.kind)).toLowerCase().includes(s)).slice(0, 6);
+  }, [q, lang]);
 
   const nav = [
     { to: "/inspired" as const, label: t.inspired },
@@ -75,7 +76,7 @@ export function Header() {
 
         <div className="flex items-center justify-end gap-2">
           <div className="relative hidden md:block">
-            <label htmlFor="site-search" className="sr-only">Search KURA</label>
+            <label htmlFor="site-search" className="sr-only">{translate(lang, "Search KURA")}</label>
             <div
               className={cn(
                 "flex h-9 w-44 items-center border px-2.5 transition-colors xl:w-56",
@@ -90,7 +91,7 @@ export function Header() {
                 className={cn("w-full bg-transparent text-sm outline-none", onRed ? "placeholder:text-primary-foreground/70" : "placeholder:text-muted-foreground")}
               />
               {q ? (
-                <button aria-label="Clear search" onClick={() => setQ("")}><X className="h-4 w-4" /></button>
+                <button aria-label={translate(lang, "Clear search")} onClick={() => setQ("")}><X className="h-4 w-4" /></button>
               ) : (
                 <Search className="h-4 w-4" aria-hidden />
               )}
@@ -98,12 +99,12 @@ export function Header() {
             {q.trim().length >= 2 && (
               <div className="absolute right-0 top-11 w-80 border bg-popover p-1 text-popover-foreground shadow-lg">
                 {results.length === 0 ? (
-                  <p className="p-3 text-sm text-muted-foreground">No results for “{q}”.</p>
+                  <p className="p-3 text-sm text-muted-foreground">{translate(lang, "No results for")} “{q}”.</p>
                 ) : (
                   results.map((r) => (
                     <Link key={r.id} to={r.to} params={{ id: r.id }} onClick={() => setQ("")} className="block rounded-sm p-2.5 hover:bg-muted">
-                      <span className="label-micro text-primary">{r.kind}</span>
-                      <span className="mt-0.5 block text-sm font-semibold leading-snug">{r.title}</span>
+                      <span className="label-micro text-primary">{translate(lang, r.kind)}</span>
+                      <span className="mt-0.5 block text-sm font-semibold leading-snug">{translate(lang, r.title)}</span>
                     </Link>
                   ))
                 )}
@@ -111,7 +112,7 @@ export function Header() {
             )}
           </div>
 
-          <div role="group" aria-label="Language" className={cn("flex h-9 border text-xs font-bold", onRed ? "border-primary-foreground/50" : "border-foreground/30")}>
+          <div role="group" aria-label={translate(lang, "Language")} className={cn("flex h-9 border text-xs font-bold", onRed ? "border-primary-foreground/50" : "border-foreground/30")}>
             {(["EN", "RW"] as const).map((l, i) => (
               <button
                 key={l}
@@ -141,7 +142,7 @@ export function Header() {
 
           <button
             className={cn("lg:hidden", onRed ? "text-primary-foreground" : "text-foreground")}
-            aria-label="Open menu"
+            aria-label={translate(lang, "Open menu")}
             aria-expanded={menu}
             onClick={() => setMenu((m) => !m)}
           >

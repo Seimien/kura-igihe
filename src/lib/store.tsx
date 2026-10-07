@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, type ReactNode } from "react";
 import { toast } from "sonner";
+import { translate } from "@/lib/i18n";
 
 export type SavedKind = "story" | "opportunity" | "event";
 export type SavedItem = { id: string; kind: SavedKind; title: string; meta?: string; date?: string; reminder?: string };
@@ -30,17 +31,17 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const toggleSave = (item: SavedItem) => {
     if (saved.some((s) => s.id === item.id)) {
       setSaved((s) => s.filter((i) => i.id !== item.id));
-      toast("Removed from saved");
+      toast(translate(lang, "Removed from saved"));
       return;
     }
     setSaved((s) => [...s, item]);
     if (item.kind === "story") {
-      toast.success("Saved");
+      toast.success(translate(lang, "Saved"));
     } else {
-      toast.success("Saved. Remind me before it closes?", {
+      toast.success(translate(lang, "Saved. Remind me before it closes?"), {
         duration: 8000,
-        action: { label: "3 days before", onClick: () => setReminder(item.id, "3 days before") },
-        cancel: { label: "1 day before", onClick: () => setReminder(item.id, "1 day before") },
+        action: { label: translate(lang, "3 days before"), onClick: () => setReminder(item.id, "3 days before") },
+        cancel: { label: translate(lang, "1 day before"), onClick: () => setReminder(item.id, "1 day before") },
       });
     }
   };
@@ -72,5 +73,5 @@ export function useApp() {
 
 export const copy = {
   EN: { inspired: "Get inspired", opps: "Find opportunities", events: "Events", help: "Help", search: "Search KURA…", saved: "Saved", looking: "What are you looking for?" },
-  RW: { inspired: "Ihumure", opps: "Shaka amahirwe", events: "Ibirori", help: "Ubufasha", search: "Shakisha kuri KURA…", saved: "Byabitswe", looking: "Urashaka iki?" },
+  RW: { inspired: "Inkuru", opps: "Shaka amahirwe", events: "Ibikorwa", help: "Ubufasha", search: "Shakisha kuri KURA…", saved: "Byabitswe", looking: "Urashaka iki?" },
 };
