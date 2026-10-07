@@ -33,7 +33,7 @@ export function Footer() {
           <h2 className="text-2xl font-bold leading-tight">{t("Stay in the loop.")}</h2>
           <p className="mt-3 text-sm text-navy-foreground/75">{t("Get new opportunities, events and stories that match your interests.")}</p>
           <button onClick={() => setPanel("alerts")} className="mt-5 bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90">
-            Get alerts →
+            {t("Get alerts →")}
           </button>
         </div>
       </div>
