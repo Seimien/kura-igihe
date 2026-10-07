@@ -1,6 +1,6 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useLocation } from "@tanstack/react-router";
 import { Bookmark, Menu, Search, X } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import logo from "@/assets/kura-logo.png.asset.json";
 import { copy, useApp } from "@/lib/store";
 import { events, opportunities, stories, trendingStory, closingSoon } from "@/lib/data";
@@ -31,11 +31,21 @@ export function Header() {
   ];
 
   const onRed = false;
+  const { pathname } = useLocation();
+  const [overBand, setOverBand] = useState(pathname === "/");
+  useEffect(() => {
+    if (pathname !== "/") return setOverBand(false);
+    const hero = document.getElementById("hero");
+    if (!hero) return;
+    const io = new IntersectionObserver(([e]) => setOverBand(!!e?.isIntersecting), { rootMargin: "-64px 0px -99% 0px" });
+    io.observe(hero);
+    return () => io.disconnect();
+  }, [pathname]);
   return (
     <header
       className={cn(
         "fixed inset-x-0 top-0 z-40 transition-[background-color,backdrop-filter,box-shadow] duration-500",
-        "border-b border-border/50 bg-background/60 backdrop-blur-md",
+        overBand ? "bg-background/30 backdrop-blur-md" : "border-b border-border/50 bg-background/70 backdrop-blur-md",
       )}
     >
       <div className="mx-auto grid h-16 max-w-[1440px] grid-cols-[auto_1fr_auto] items-center gap-4 px-4 lg:grid-cols-3 lg:px-8">
@@ -51,7 +61,10 @@ export function Header() {
               <li key={n.to}>
                 <Link
                   to={n.to}
-                  className="label-micro text-foreground/80 transition-colors hover:text-primary data-[status=active]:text-primary data-[status=active]:underline data-[status=active]:underline-offset-8"
+                  className={cn(
+                    "label-micro transition-colors data-[status=active]:underline data-[status=active]:underline-offset-8",
+                    overBand ? "text-primary-foreground/90 hover:text-primary-foreground" : "text-foreground/80 hover:text-primary data-[status=active]:text-primary",
+                  )}
                 >
                   {n.label}
                 </Link>
