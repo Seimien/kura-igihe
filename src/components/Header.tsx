@@ -56,13 +56,13 @@ export function Header() {
         </Link>
 
         <nav aria-label="Main" className="hidden justify-center lg:flex">
-          <ul className="flex gap-5 xl:gap-7">
+          <ul className="flex gap-4 xl:gap-6">
             {nav.map((n) => (
               <li key={n.to}>
                 <Link
                   to={n.to}
                   className={cn(
-                    "label-micro transition-colors data-[status=active]:underline data-[status=active]:underline-offset-8",
+                    "label-micro whitespace-nowrap text-[0.62rem] transition-colors data-[status=active]:underline data-[status=active]:underline-offset-8",
                     overBand ? "text-primary-foreground/90 hover:text-primary-foreground" : "text-foreground/80 hover:text-primary data-[status=active]:text-primary",
                   )}
                 >
