@@ -1,13 +1,15 @@
 import type { ReactNode } from "react";
+import { useT } from "@/lib/i18n";
 
 export function PageShell({ kicker, title, intro, subheader, children }: { kicker: string; title: string; intro?: string; subheader?: ReactNode; children: ReactNode }) {
+  const t = useT();
   return (
     <div className="pt-16">
       <div className="bg-primary text-primary-foreground">
         <div className="mx-auto max-w-[1440px] px-6 py-12 lg:px-10">
-          <p className="label-micro opacity-80">{kicker}</p>
-          <h1 className="mt-2 text-4xl font-extrabold leading-tight md:text-5xl">{title}</h1>
-          {intro && <p className="mt-3 max-w-xl opacity-90">{intro}</p>}
+          <p className="label-micro opacity-80">{t(kicker)}</p>
+          <h1 className="mt-2 text-4xl font-extrabold leading-tight md:text-5xl">{t(title)}</h1>
+          {intro && <p className="mt-3 max-w-xl opacity-90">{t(intro)}</p>}
         </div>
       </div>
       {subheader && (
