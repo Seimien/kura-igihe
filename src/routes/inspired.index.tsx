@@ -1,8 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { PageShell } from "@/components/PageShell";
+import { useState } from "react";
+import { CategoryTab, PageShell } from "@/components/PageShell";
 import { SaveButton } from "@/components/SaveButton";
 import { ShareButton } from "@/components/ShareButton";
-import { allStories } from "@/lib/data";
+import { allStories, storyCategories } from "@/lib/data";
 
 export const Route = createFileRoute("/inspired/")({
   head: () => ({
@@ -13,10 +14,28 @@ export const Route = createFileRoute("/inspired/")({
       { property: "og:description", content: "Real stories of young people building careers, businesses and communities." },
     ],
   }),
-  component: () => (
-    <PageShell kicker="Inspire" title="Inspired" intro="Stories of young people taking their next step.">
+  component: InspiredList,
+});
+
+function InspiredList() {
+  const [cat, setCat] = useState("All");
+  const list = cat === "All" ? allStories : allStories.filter((s) => s.category.includes(cat));
+  return (
+    <PageShell
+      kicker="Inspire"
+      title="Inspired"
+      intro="Stories of young people taking their next step."
+      subheader={
+        <div role="tablist" aria-label="Story categories" className="flex overflow-x-auto [scrollbar-width:none]">
+          {["All", ...storyCategories].map((c) => (
+            <CategoryTab key={c} active={cat === c} onClick={() => setCat(c)}>{c}</CategoryTab>
+          ))}
+        </div>
+      }
+    >
+      <p className="mb-6 text-sm text-muted-foreground">{list.length} {list.length === 1 ? "story" : "stories"}</p>
       <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-        {allStories.map((s) => (
+        {list.map((s) => (
           <article key={s.id} className="group">
             <Link to="/inspired/$id" params={{ id: s.id }} className="block">
               <img src={s.image} alt="" loading="lazy" className="aspect-[4/3] w-full object-cover object-top" />
@@ -31,6 +50,7 @@ export const Route = createFileRoute("/inspired/")({
           </article>
         ))}
       </div>
+      {list.length === 0 && <p className="py-10 text-muted-foreground">No {cat} stories yet — check back soon.</p>}
     </PageShell>
-  ),
-});
+  );
+}

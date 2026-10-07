@@ -1,9 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, BadgeCheck, MapPin, Play } from "lucide-react";
-import { useMemo, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { ShareButton } from "@/components/ShareButton";
 import { SaveButton } from "@/components/SaveButton";
-import { closingSoon, daysLeft, events, fmtDate, opportunities, stories, topics, trendingStory } from "@/lib/data";
+import { closingSoon, daysLeft, events, fmtDate, opportunities, stories, trendingStory } from "@/lib/data";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/")({
@@ -44,7 +44,7 @@ function Hero() {
   return (
     <section id="hero" aria-label="Featured" className="relative flex h-[100svh] min-h-[600px] flex-col overflow-hidden bg-background">
       {/* central red band — starts below the glass header */}
-      <div aria-hidden className="absolute bottom-0 left-1/3 top-16 hidden w-1/3 bg-primary lg:block" />
+      <div aria-hidden className="absolute inset-y-0 left-1/3 hidden w-1/3 bg-primary lg:block" />
 
       <div
         ref={ref}
@@ -161,19 +161,14 @@ function SectionHead({ kicker, title, to, cta }: { kicker: string; title: string
 }
 
 function WhyKura() {
-  const values = ["Truth", "Accountability", "Integrity"];
   return (
     <section className="border-b bg-paper">
       <div className="mx-auto max-w-[1440px] px-6 py-16 lg:px-10">
         <p className="label-micro text-primary">Why KURA</p>
         <blockquote className="mt-3 max-w-4xl text-2xl font-bold leading-snug md:text-3xl">
-          “We want young people to understand more, discover what's possible and feel confident taking their next step.”
+          “Your definition of success will differ from other people’s personal goals, but you must remember that you are on different paths.”
         </blockquote>
-        <ul className="mt-10 grid grid-cols-3 divide-x border-y">
-          {values.map((v) => (
-            <li key={v} className="py-6 text-center text-sm font-extrabold uppercase tracking-[0.14em] text-primary md:text-2xl">{v}</li>
-          ))}
-        </ul>
+        <p className="label-micro mt-4 text-muted-foreground">— KURA</p>
         <div className="mt-6 flex flex-wrap items-center gap-6 text-sm">
           <span className="text-muted-foreground">In partnership with <strong className="text-foreground">Mastercard Foundation</strong></span>
           <Link to="/about" className="font-semibold text-primary hover:underline">How we verify →</Link>
@@ -183,32 +178,12 @@ function WhyKura() {
   );
 }
 
-const tabs = ["Closing soon", "Jobs", "Internships", "Scholarships", "Grants"] as const;
-const tabType: Record<string, string> = { Jobs: "Job", Internships: "Internship", Scholarships: "Scholarship", Grants: "Grant" };
-
 function Opportunities() {
-  const [tab, setTab] = useState<(typeof tabs)[number]>("Closing soon");
-  const list = useMemo(() => {
-    const l = tab === "Closing soon" ? opportunities : opportunities.filter((o) => o.type === tabType[tab]);
-    return [...l].sort((a, b) => a.deadline.localeCompare(b.deadline)).slice(0, 3);
-  }, [tab]);
+  const list = [...opportunities].sort((a, b) => a.deadline.localeCompare(b.deadline)).slice(0, 3);
   return (
     <section id="opportunities" className="scroll-mt-20">
       <div className="mx-auto max-w-[1440px] px-6 py-16 lg:px-10">
         <SectionHead kicker="Act" title="Your next opportunity" to="/opportunities" cta="Find all opportunities" />
-        <div role="tablist" className="mb-6 flex flex-wrap gap-2">
-          {tabs.map((t) => (
-            <button
-              key={t}
-              role="tab"
-              aria-selected={tab === t}
-              onClick={() => setTab(t)}
-              className={cn("border px-4 py-2 text-sm font-semibold transition-colors", tab === t ? "border-navy bg-navy text-navy-foreground" : "border-input hover:border-foreground")}
-            >
-              {t}
-            </button>
-          ))}
-        </div>
         <div className="grid gap-4 md:grid-cols-3">
           {list.map((o) => {
             const d = daysLeft(o.deadline).days;
@@ -246,11 +221,6 @@ function Inspired() {
     <section id="inspired" className="scroll-mt-20 border-y bg-paper">
       <div className="mx-auto max-w-[1440px] px-6 py-16 lg:px-10">
         <SectionHead kicker="Inspire" title="Inspired" to="/inspired" cta="All stories" />
-        <div className="mb-8 flex flex-wrap gap-2">
-          {topics.map((t) => (
-            <Link key={t} to="/inspired" className="label-micro border border-input px-3 py-1.5 hover:border-primary hover:text-primary">{t}</Link>
-          ))}
-        </div>
         <div className="grid gap-6 md:grid-cols-3">
           {stories.map((s) => (
             <article key={s.id} className="group flex flex-col">
