@@ -143,3 +143,34 @@ export function opportunityDetails(o: Opportunity) {
 export function eventDetails(e: EventItem) {
   return `${e.title} brings together young people, employers and mentors for a day of learning, networking and practical sessions. Entry is free, but places are limited — register early to secure your spot.`;
 }
+
+export const storyCategories = ["Health", "Education", "Career", "Fashion", "Entertainment", "Culture", "Money", "Youth & Society", "Technology"];
+
+export type JobAttrs = {
+  employment: "Full-time" | "Part-time" | "Contract" | "Freelance";
+  arrangement: "On-site" | "Remote" | "Hybrid";
+  region: "Kigali" | "Rwanda" | "Africa" | "International";
+  level: "Entry Level" | "Mid-Level" | "Senior Level";
+  sector: string;
+};
+export const jobAttrs: Record<string, JobAttrs> = {
+  "bk-intern": { employment: "Full-time", arrangement: "On-site", region: "Kigali", level: "Entry Level", sector: "Finance" },
+  "irembo-dev": { employment: "Full-time", arrangement: "Hybrid", region: "Kigali", level: "Entry Level", sector: "Technology" },
+  "mtn-intern": { employment: "Part-time", arrangement: "Hybrid", region: "Kigali", level: "Entry Level", sector: "Media" },
+  "kla-job": { employment: "Contract", arrangement: "On-site", region: "Rwanda", level: "Mid-Level", sector: "Health" },
+  "kigali-job": { employment: "Full-time", arrangement: "On-site", region: "Rwanda", level: "Mid-Level", sector: "Technology" },
+};
+export const jobFacets = {
+  employment: ["Full-time", "Part-time", "Contract", "Freelance"],
+  arrangement: ["On-site", "Remote", "Hybrid"],
+  region: ["Kigali", "Rwanda", "Africa", "International"],
+  level: ["Entry Level", "Mid-Level", "Senior Level"],
+  sector: ["Technology", "Business", "Creative Industries", "Media", "Finance", "Agriculture", "Education", "Health", "Development Sector"],
+} as const;
+export const facetLabels: Record<keyof typeof jobFacets, string> = {
+  employment: "Opportunity type",
+  arrangement: "Work arrangement",
+  region: "Location",
+  level: "Experience level",
+  sector: "Sector",
+};
