@@ -16,13 +16,17 @@ export type Story = {
 export type Opportunity = {
   id: string;
   title: string;
-  type: "Job" | "Internship" | "Scholarship" | "Grant";
+  type: "Job" | "Internship" | "Scholarship" | "Grant" | "Training" | "Workshop";
   organisation: string;
   deadline: string; // ISO
   location: string;
   eligibility: string;
   applicationUrl: string;
   verified: boolean;
+  lastChecked?: string;
+  publishedAt?: string;
+  sourceUrl?: string;
+  languages?: ("EN" | "RW")[];
 };
 export type EventItem = {
   id: string;
@@ -135,7 +139,7 @@ export function storyBody(s: Story): string[] {
 }
 export function opportunityDetails(o: Opportunity) {
   return {
-    about: `${o.organisation} is offering the ${o.title} for motivated young people. This ${o.type.toLowerCase()} is verified by the KURA team.`,
+    about: `${o.organisation} is offering the ${o.title} for motivated young people.`,
     requirements: [o.eligibility, "Rwandan citizen or resident", "Strong motivation and clear goals", "Updated CV and short motivation letter"],
     howToApply: "Prepare your documents, complete the online form on the organisation's website, and submit before the deadline. Late applications are not accepted.",
   };
@@ -173,4 +177,33 @@ export const facetLabels: Record<keyof typeof jobFacets, string> = {
   region: "Location",
   level: "Experience level",
   sector: "Sector",
+};
+
+export type OpportunityStatus = "Open" | "Closing soon" | "Closed" | "No deadline stated";
+export function opportunityStatus(deadline: string, now = Date.now()): OpportunityStatus {
+  const end = Date.parse(deadline);
+  if (!Number.isFinite(end)) return "No deadline stated";
+  if (end <= now) return "Closed";
+  return end - now <= 7 * 86400000 ? "Closing soon" : "Open";
+}
+export function needsCheck(lastChecked?: string, now = Date.now()) {
+  const checked = lastChecked ? Date.parse(lastChecked) : NaN;
+  return !Number.isFinite(checked) || now - checked > 30 * 86400000;
+}
+export function providerUrl(value?: string) {
+  if (!value) return undefined;
+  try {
+    const url = new URL(value);
+    return url.protocol === "https:" ? url.href : undefined;
+  } catch { return undefined; }
+}
+export function hasVerification(o: Opportunity) {
+  return o.verified && !!providerUrl(o.sourceUrl) && !!o.lastChecked && !needsCheck(o.lastChecked);
+}
+export function openOpportunities(items = allOpportunities, now = Date.now()) {
+  return items.filter((o) => opportunityStatus(o.deadline, now) !== "Closed")
+    .sort((a, b) => (Date.parse(a.deadline) || Infinity) - (Date.parse(b.deadline) || Infinity));
+}
+export const storyNextSteps: Record<string, string> = {
+  "aline-code": "irembo-dev", "nurse-musanze": "kla-job", "kitenge-studio": "mtn-intern", "tea-data": "bdf-grant",
 };
