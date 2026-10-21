@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { toast } from "sonner";
 import { translate } from "@/lib/i18n";
 
@@ -23,6 +23,21 @@ const C = createContext<Ctx | null>(null);
 export function AppProvider({ children }: { children: ReactNode }) {
   const [saved, setSaved] = useState<SavedItem[]>([]);
   const [lang, setLang] = useState<Lang>("EN");
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    try {
+      const value = JSON.parse(localStorage.getItem("kura-saved") || "[]");
+      if (Array.isArray(value)) setSaved(value.filter((x) => x && typeof x.id === "string" && typeof x.title === "string" && ["story", "opportunity", "event"].includes(x.kind)));
+      const choice = localStorage.getItem("kura-language");
+      if (choice === "EN" || choice === "RW") setLang(choice);
+    } catch { /* Storage may be unavailable. */ }
+    setReady(true);
+  }, []);
+  useEffect(() => {
+    document.documentElement.lang = lang === "RW" ? "rw" : "en";
+    if (!ready) return;
+    try { localStorage.setItem("kura-saved", JSON.stringify(saved)); localStorage.setItem("kura-language", lang); } catch { /* In-memory use remains available. */ }
+  }, [saved, lang, ready]);
   const [panel, setPanel] = useState<Ctx["panel"]>(null);
 
   const setReminder = (id: string, r: string) =>
@@ -35,15 +50,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       return;
     }
     setSaved((s) => [...s, item]);
-    if (item.kind === "story") {
-      toast.success(translate(lang, "Saved"));
-    } else {
-      toast.success(translate(lang, "Saved. Remind me before it closes?"), {
-        duration: 8000,
-        action: { label: translate(lang, "3 days before"), onClick: () => setReminder(item.id, "3 days before") },
-        cancel: { label: translate(lang, "1 day before"), onClick: () => setReminder(item.id, "1 day before") },
-      });
-    }
+    toast.success(translate(lang, "Saved"));
   };
 
   return (

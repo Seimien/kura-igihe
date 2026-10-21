@@ -1,9 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, BadgeCheck, MapPin, Play } from "lucide-react";
+import { ArrowRight, MapPin, Play } from "lucide-react";
 import { useRef, useState } from "react";
 import { ShareButton } from "@/components/ShareButton";
 import { SaveButton } from "@/components/SaveButton";
-import { closingSoon, daysLeft, events, opportunities, stories, trendingStory } from "@/lib/data";
+import { closingSoon, daysLeft, events, openOpportunities, opportunityStatus, stories, trendingStory } from "@/lib/data";
+import { OpportunitySummary, OpportunityStatus } from "@/components/OpportunitySummary";
 import { cn } from "@/lib/utils";
 import { fmtDateL, monthShort, storyDate, useT } from "@/lib/i18n";
 import { useApp } from "@/lib/store";
@@ -24,10 +25,11 @@ function Home() {
   return (
     <>
       <Hero />
-      <WhyKura />
       <Opportunities />
+      <WhyKura />
       <Inspired />
       <Events />
+      <LearningCta />
       <HelpCta />
     </>
   );
@@ -62,7 +64,7 @@ function Hero() {
             {t("The bridge between youth, the future and")}{lang === "EN" ? " " : ""}<span className="text-primary">{t("ambition.")}</span>
           </h1>
           <p className="mt-5 max-w-sm text-base leading-relaxed text-muted-foreground">
-            {t("Verified stories, scholarships, jobs and events for young people in Rwanda — all in one place.")}
+            {t("Stories, scholarships, jobs and events for young people in Rwanda — all in one place.")}
           </p>
           <Link to="/about" className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-foreground hover:text-primary">
             {t("Explore KURA")} <ArrowRight className="h-4 w-4" />
@@ -110,7 +112,7 @@ function Hero() {
           </Link>
           <p className="mt-2 flex items-center gap-1.5 text-sm text-muted-foreground">
             {closingSoon.organisation}
-            {closingSoon.verified && <BadgeCheck className="h-4 w-4 text-primary" aria-label={t("Verified")} />}
+            
           </p>
           <div className="mt-6 flex items-end gap-6 border-y py-4">
             <div>
@@ -123,6 +125,7 @@ function Hero() {
             </div>
             <span className="ml-auto text-xs text-muted-foreground" suppressHydrationWarning>{t("Deadline")} {fmtDateL(closingSoon.deadline, lang)}</span>
           </div>
+          <OpportunitySummary opportunity={closingSoon} />
           <div className="mt-5 flex flex-wrap gap-2">
             <Link to="/opportunities/$id" params={{ id: closingSoon.id }} className="bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary/90">{t("Apply")}</Link>
             <SaveButton item={{ id: closingSoon.id, kind: "opportunity", title: closingSoon.title, meta: closingSoon.type }} />
@@ -185,13 +188,13 @@ function WhyKura() {
 }
 
 function Opportunities() {
-  const list = [...opportunities].sort((a, b) => a.deadline.localeCompare(b.deadline)).slice(0, 3);
+  const list = openOpportunities().filter((o) => opportunityStatus(o.deadline) === "Closing soon").slice(0, 5);
   const t = useT();
   const { lang } = useApp();
   return (
     <section id="opportunities" className="scroll-mt-20">
       <div className="mx-auto max-w-[1440px] px-6 py-16 lg:px-10">
-        <SectionHead kicker="Act" title="Your next opportunity" to="/opportunities" cta="Find all opportunities" />
+        <SectionHead kicker="Act" title="Closing soon" to="/opportunities" cta="Find all opportunities" />
         <div className="grid gap-4 md:grid-cols-3">
           {list.map((o) => {
             const d = daysLeft(o.deadline).days;
@@ -205,9 +208,10 @@ function Opportunities() {
                 </div>
                 <h3 className="mt-3 text-lg font-bold leading-snug"><Link to="/opportunities/$id" params={{ id: o.id }} className="hover:text-primary">{t(o.title)}</Link></h3>
                 <p className="mt-1 flex items-center gap-1 text-sm font-semibold text-muted-foreground">
-                  {o.organisation} {o.verified && <BadgeCheck className="h-4 w-4 text-primary" aria-label={t("Verified")} />}
+                  {o.organisation}
                 </p>
                 <p className="mt-3 flex items-center gap-1 text-sm text-muted-foreground"><MapPin className="h-3.5 w-3.5" /> {t(o.location)} · {t(o.eligibility)}</p>
+                <OpportunitySummary opportunity={o} />
                 <div className="mt-5 flex items-center gap-2 border-t pt-4">
                   <Link to="/opportunities/$id" params={{ id: o.id }} className="bg-primary px-4 py-1.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90">{t("Apply")}</Link>
                   <SaveButton item={{ id: o.id, kind: "opportunity", title: o.title, meta: o.type }} label={false} />
@@ -235,7 +239,7 @@ function Inspired() {
           {stories.map((s) => (
             <article key={s.id} className="group flex flex-col">
               <div className="relative aspect-[4/3] overflow-hidden bg-muted">
-                <Link to="/inspired/$id" params={{ id: s.id }} aria-label={t(s.title)}><img src={s.image} alt="" loading="lazy" width={1024} height={768} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" /></Link>
+                <Link to="/inspired/$id" params={{ id: s.id }} aria-label={t(s.title)}><img src={s.image} alt={t(s.title)} loading="lazy" width={1024} height={768} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" /></Link>
                 {s.youtubeUrl && (
                   <a href={s.youtubeUrl} target="_blank" rel="noreferrer" className="label-micro absolute bottom-3 left-3 inline-flex items-center gap-1.5 bg-primary px-2.5 py-1.5 text-primary-foreground">
                     <Play className="h-3 w-3 fill-current" /> {t("Watch story")}
@@ -311,4 +315,9 @@ function HelpCta() {
       </div>
     </section>
   );
+}
+
+function LearningCta() {
+  const t = useT();
+  return <section className="border-t bg-paper"><div className="mx-auto flex max-w-[1440px] flex-wrap items-center justify-between gap-6 px-6 py-12 lg:px-10"><h2 className="text-2xl font-bold">{t("Learn and advice")}</h2><Link to="/learn" className="inline-flex items-center gap-2 font-semibold text-primary">{t("Prepare your next step")}<ArrowRight className="h-4 w-4" /></Link></div></section>;
 }

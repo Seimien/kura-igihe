@@ -21,14 +21,15 @@ export function Header() {
       ...[closingSoon, ...opportunities].map((x) => ({ id: x.id, title: x.title, kind: x.type, to: "/opportunities/$id" as const })),
       ...events.map((x) => ({ id: x.id, title: x.title, kind: "Event", to: "/events/$id" as const })),
     ];
-    return all.filter((r) => (r.title + r.kind + translate(lang, r.title) + translate(lang, r.kind)).toLowerCase().includes(s)).slice(0, 6);
+    return all.filter((r) => (r.title + r.kind + translate("RW", r.title) + translate("RW", r.kind)).toLowerCase().includes(s)).slice(0, 6);
   }, [q, lang]);
 
   const nav = [
     { to: "/inspired" as const, label: t.inspired },
     { to: "/opportunities" as const, label: t.opps },
     { to: "/events" as const, label: t.events },
-    { to: "/help" as const, label: t.help },
+    { to: "/learn" as const, label: translate(lang, "Learn") },
+    { to: "/wellness" as const, label: translate(lang, "Wellness") },
   ];
 
   const onRed = false;
@@ -57,7 +58,7 @@ export function Header() {
         </Link>
 
         <nav aria-label="Main" className="hidden justify-center lg:flex">
-          <ul className="flex gap-4 xl:gap-6">
+          <ul className="flex gap-2 xl:gap-3">
             {nav.map((n) => (
               <li key={n.to}>
                 <Link
@@ -75,7 +76,7 @@ export function Header() {
         </nav>
 
         <div className="flex items-center justify-end gap-2">
-          <div className="relative hidden md:block">
+          <div className="relative hidden xl:block">
             <label htmlFor="site-search" className="sr-only">{translate(lang, "Search KURA")}</label>
             <div
               className={cn(
@@ -152,6 +153,8 @@ export function Header() {
       </div>
       {menu && (
         <nav aria-label="Mobile" className="border-t bg-paper px-4 py-3 lg:hidden">
+          <label className="block"><span className="sr-only">{translate(lang, "Search KURA")}</span><input value={q} onChange={(e) => setQ(e.target.value)} placeholder={t.search} className="w-full border bg-background p-3 text-sm" /></label>
+          {q.trim().length >= 2 && <div>{results.length === 0 ? <p className="py-3 text-sm">{translate(lang, "No results for")} “{q}”</p> : results.map((r) => <Link key={r.id} to={r.to} params={{ id: r.id }} onClick={() => { setQ(""); setMenu(false); }} className="block border-b py-3 text-sm font-semibold">{translate(lang, r.title)}</Link>)}</div>}
           {nav.map((n) => (
             <Link key={n.to} to={n.to} onClick={() => setMenu(false)} className="label-micro block py-3 text-foreground">
               {n.label}

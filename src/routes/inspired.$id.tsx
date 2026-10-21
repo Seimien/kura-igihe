@@ -3,7 +3,7 @@ import { Play } from "lucide-react";
 import { DetailShell, NotFoundItem } from "@/components/DetailShell";
 import { SaveButton } from "@/components/SaveButton";
 import { ShareButton } from "@/components/ShareButton";
-import { allStories, storyBody } from "@/lib/data";
+import { allStories, storyBody, allOpportunities, storyNextSteps } from "@/lib/data";
 import { useT, fmtDateL, fmtLong, storyDate } from "@/lib/i18n";
 import { useApp } from "@/lib/store";
 
@@ -35,6 +35,7 @@ function StoryPage() {
   const { story: s } = Route.useLoaderData();
   const t = useT();
   const { lang } = useApp();
+  const next = allOpportunities.find((o) => o.id === storyNextSteps[s.id]);
   const related = allStories.filter((x) => x.id !== s.id).slice(0, 3);
   return (
     <DetailShell back="/inspired" backLabel="All stories">
@@ -49,10 +50,11 @@ function StoryPage() {
           </a>
         )}
       </div>
-      <img src={s.image} alt="" className="mt-8 aspect-[16/10] w-full object-cover object-top" />
+      <img src={s.image} alt={t(s.title)} className="mt-8 aspect-[16/10] w-full object-cover object-top" />
       <div className="mt-8 space-y-5 text-lg leading-relaxed">
         {storyBody(s).map((p, i) => <p key={i}>{t(p)}</p>)}
       </div>
+      <section className="mt-12 border-t pt-8"><h2 className="text-2xl font-bold">{t("What can I do next?")}</h2><ul className="mt-5 space-y-4">{next && <li><Link to="/opportunities/$id" params={{ id: next.id }} className="font-semibold text-primary">{t(next.title)} →</Link></li>}<li><Link to="/learn" className="font-semibold text-primary">{t("Prepare your next step")} →</Link></li><li><Link to="/events" className="font-semibold text-primary">{t("Find a workshop or event")} →</Link></li></ul></section>
       <div className="mt-12 border-t pt-8">
         <p className="label-micro text-primary">{t("More stories")}</p>
         <ul className="mt-4 space-y-3">

@@ -27,7 +27,7 @@ function HelpPage() {
           </article>
         ))}
       </div>
-      <p className="mt-8 text-sm text-muted-foreground">{t("In an emergency in Rwanda, call")} <strong className="text-foreground">112</strong>. {t("Free youth helpline:")} <strong className="text-foreground">114</strong>.</p>
+      <p className="mt-8 text-sm text-muted-foreground">{t("Local support contacts are awaiting confirmation. For urgent help, contact a nearby health facility or your local emergency service.")}</p>
     </PageShell>
   );
 }
