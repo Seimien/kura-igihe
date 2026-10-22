@@ -15,7 +15,8 @@ export const Route = createFileRoute("/inspired/$id")({
     return { story };
   },
   head: ({ loaderData }) => {
-    if (!loaderData) return { meta: [{ title: "Story not found | KURA" }, { name: "robots", content: "noindex" }] };
+    if (!loaderData) return { meta: [
+      { name: "twitter:card", content: "summary_large_image" },{ title: "Story not found | KURA" }, { name: "robots", content: "noindex" }] };
     const s = loaderData.story;
     return {
       meta: [

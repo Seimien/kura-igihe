@@ -11,6 +11,8 @@ import { useApp } from "@/lib/store";
 export const Route = createFileRoute("/inspired/")({
   head: () => ({
     meta: [
+      { name: "twitter:card", content: "summary_large_image" },
+      { property: "og:type", content: "website" },
       { title: "Inspired — Stories of young Rwandans | KURA" },
       { name: "description", content: "Real stories of young people building careers, businesses and communities." },
       { property: "og:title", content: "Inspired — KURA" },

@@ -15,11 +15,13 @@ export const Route = createFileRoute("/events/$id")({
     return { ev };
   },
   head: ({ loaderData }) => {
-    if (!loaderData) return { meta: [{ title: "Event not found | KURA" }, { name: "robots", content: "noindex" }] };
+    if (!loaderData) return { meta: [
+      { name: "twitter:card", content: "summary_large_image" },{ title: "Event not found | KURA" }, { name: "robots", content: "noindex" }] };
     const e = loaderData.ev;
     const d = `${e.type} · ${e.location}`;
     return {
       meta: [
+      { property: "og:type", content: "website" },
         { title: `${e.title} | KURA Events` },
         { name: "description", content: d },
         { property: "og:title", content: e.title },

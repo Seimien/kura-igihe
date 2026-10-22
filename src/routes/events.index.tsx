@@ -10,6 +10,8 @@ import { useApp } from "@/lib/store";
 export const Route = createFileRoute("/events/")({
   head: () => ({
     meta: [
+      { name: "twitter:card", content: "summary_large_image" },
+      { property: "og:type", content: "website" },
       { title: "Events — What's happening | KURA" },
       { name: "description", content: "Workshops, career fairs and youth events across Rwanda." },
       { property: "og:title", content: "Events — KURA" },
