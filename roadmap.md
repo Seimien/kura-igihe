@@ -1,5 +1,9 @@
 # Case study implementation
 
+- [ ] Add Social Impact page with playable videos and English/Kinyarwanda copy.
+- [ ] Compare the current experience against available reference documents.
+- [ ] Previous bookmark appearance — restore through Lovable History, not manual code reversal.
+
 - [x] Replace generated story imagery with licensed stock photographs, preserving current framing.
 
 - [x] Standardize opportunity summaries, statuses, source freshness and honest trust signals.
