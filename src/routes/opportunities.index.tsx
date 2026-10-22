@@ -17,6 +17,8 @@ import { useApp } from "@/lib/store";
 export const Route = createFileRoute("/opportunities/")({
   head: () => ({
     meta: [
+      { name: "twitter:card", content: "summary_large_image" },
+      { property: "og:type", content: "website" },
       { title: "Opportunities — Jobs, scholarships & grants | KURA" },
       { name: "description", content: "Jobs, internships, scholarships and grants for young people in Rwanda." },
       { property: "og:title", content: "Opportunities — KURA" },

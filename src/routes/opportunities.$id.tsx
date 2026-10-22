@@ -16,13 +16,16 @@ export const Route = createFileRoute("/opportunities/$id")({
     return { opp };
   },
   head: ({ loaderData }) => {
-    if (!loaderData) return { meta: [{ title: "Opportunity not found | KURA" }, { name: "robots", content: "noindex" }] };
+    if (!loaderData) return { meta: [
+      { name: "twitter:card", content: "summary_large_image" },{ title: "Opportunity not found | KURA" }, { name: "robots", content: "noindex" }] };
     const o = loaderData.opp;
     const d = `${o.type} at ${o.organisation} · ${o.location}`;
     return {
       meta: [
+      { property: "og:type", content: "website" },
         { title: `${o.title} — ${o.organisation} | KURA` },
         { name: "description", content: d },
+        { name: "twitter:card", content: "summary_large_image" },
         { property: "og:title", content: o.title },
         { property: "og:description", content: d },
       ],

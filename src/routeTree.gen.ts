@@ -12,6 +12,8 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as HelpRouteImport } from './routes/help'
+import { Route as LearnRouteImport } from './routes/learn'
+import { Route as WellnessRouteImport } from './routes/wellness'
 import { Route as EventsIndexRouteImport } from './routes/events.index'
 import { Route as EventsIdRouteImport } from './routes/events.$id'
 import { Route as InspiredIndexRouteImport } from './routes/inspired.index'
@@ -32,6 +34,16 @@ const AboutRoute = AboutRouteImport.update({
 const HelpRoute = HelpRouteImport.update({
   id: '/help',
   path: '/help',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LearnRoute = LearnRouteImport.update({
+  id: '/learn',
+  path: '/learn',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WellnessRoute = WellnessRouteImport.update({
+  id: '/wellness',
+  path: '/wellness',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EventsIndexRoute = EventsIndexRouteImport.update({
@@ -69,6 +81,8 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/help': typeof HelpRoute
+  '/learn': typeof LearnRoute
+  '/wellness': typeof WellnessRoute
   '/events/$id': typeof EventsIdRoute
   '/inspired/$id': typeof InspiredIdRoute
   '/opportunities/$id': typeof OpportunitiesIdRoute
@@ -80,6 +94,8 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/help': typeof HelpRoute
+  '/learn': typeof LearnRoute
+  '/wellness': typeof WellnessRoute
   '/events/$id': typeof EventsIdRoute
   '/inspired/$id': typeof InspiredIdRoute
   '/opportunities/$id': typeof OpportunitiesIdRoute
@@ -92,6 +108,8 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/help': typeof HelpRoute
+  '/learn': typeof LearnRoute
+  '/wellness': typeof WellnessRoute
   '/events/$id': typeof EventsIdRoute
   '/inspired/$id': typeof InspiredIdRoute
   '/opportunities/$id': typeof OpportunitiesIdRoute
@@ -105,6 +123,8 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/help'
+    | '/learn'
+    | '/wellness'
     | '/events/$id'
     | '/inspired/$id'
     | '/opportunities/$id'
@@ -116,6 +136,8 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/help'
+    | '/learn'
+    | '/wellness'
     | '/events/$id'
     | '/inspired/$id'
     | '/opportunities/$id'
@@ -127,6 +149,8 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/help'
+    | '/learn'
+    | '/wellness'
     | '/events/$id'
     | '/inspired/$id'
     | '/opportunities/$id'
@@ -139,6 +163,8 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   HelpRoute: typeof HelpRoute
+  LearnRoute: typeof LearnRoute
+  WellnessRoute: typeof WellnessRoute
   EventsIdRoute: typeof EventsIdRoute
   InspiredIdRoute: typeof InspiredIdRoute
   OpportunitiesIdRoute: typeof OpportunitiesIdRoute
@@ -168,6 +194,20 @@ declare module '@tanstack/react-router' {
       path: '/help'
       fullPath: '/help'
       preLoaderRoute: typeof HelpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/learn': {
+      id: '/learn'
+      path: '/learn'
+      fullPath: '/learn'
+      preLoaderRoute: typeof LearnRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/wellness': {
+      id: '/wellness'
+      path: '/wellness'
+      fullPath: '/wellness'
+      preLoaderRoute: typeof WellnessRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/events/': {
@@ -219,6 +259,8 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   HelpRoute: HelpRoute,
+  LearnRoute: LearnRoute,
+  WellnessRoute: WellnessRoute,
   EventsIdRoute: EventsIdRoute,
   InspiredIdRoute: InspiredIdRoute,
   OpportunitiesIdRoute: OpportunitiesIdRoute,

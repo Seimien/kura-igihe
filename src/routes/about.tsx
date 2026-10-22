@@ -5,6 +5,8 @@ import { useT } from "@/lib/i18n";
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
+      { name: "twitter:card", content: "summary_large_image" },
+      { property: "og:type", content: "website" },
       { title: "About KURA — Youth with ambition" },
       { name: "description", content: "KURA is a youth media platform. Discover our purpose and approach to opportunity information." },
       { property: "og:title", content: "About KURA" },

@@ -6,6 +6,8 @@ import { useT } from "@/lib/i18n";
 export const Route = createFileRoute("/help")({
   head: () => ({
     meta: [
+      { name: "twitter:card", content: "summary_large_image" },
+      { property: "og:type", content: "website" },
       { title: "Get help — Trusted support | KURA" },
       { name: "description", content: "Confidential, trusted resources and organisations for young people." },
       { property: "og:title", content: "Get help — KURA" },

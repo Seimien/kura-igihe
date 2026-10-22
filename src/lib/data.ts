@@ -1,7 +1,11 @@
-import heroStory from "@/assets/hero-story.jpg";
-import health from "@/assets/story-health.jpg";
-import fashion from "@/assets/story-fashion.jpg";
-import career from "@/assets/story-career.jpg";
+import heroStock from "@/assets/hero-stock.jpg.asset.json";
+const heroStory = heroStock.url;
+import healthStock from "@/assets/health-stock.jpg.asset.json";
+const health = healthStock.url;
+import fashionStock from "@/assets/fashion-stock.jpg.asset.json";
+const fashion = fashionStock.url;
+import careerStock from "@/assets/career-stock.jpg.asset.json";
+const career = careerStock.url;
 
 export type Story = {
   id: string;
@@ -12,6 +16,8 @@ export type Story = {
   date: string;
   featured?: boolean;
   youtubeUrl?: string;
+  photoCredit?: string;
+  photoSource?: string;
 };
 export type Opportunity = {
   id: string;
@@ -46,6 +52,8 @@ export const trendingStory: Story = {
   summary:
     "Aline Uwase, 24, built a payments tool for Kigali market vendors. Here is how she started with nothing but data bundles and stubbornness.",
   image: heroStory,
+  photoCredit: "Christina Morillo / Pexels",
+  photoSource: "https://www.pexels.com/photo/1181249/",
   date: "Oct 4, 2026",
   featured: true,
   youtubeUrl: "https://www.youtube.com/@kura",
@@ -58,6 +66,8 @@ export const stories: Story[] = [
     category: "Health",
     summary: "How Diane turned a two-room clinic into the place young mothers actually want to visit.",
     image: health,
+    photoCredit: "Laura James / Pexels",
+    photoSource: "https://www.pexels.com/photo/6098046/",
     date: "Oct 2, 2026",
   },
   {
@@ -66,6 +76,8 @@ export const stories: Story[] = [
     category: "Fashion",
     summary: "Grace's kitenge label now ships to six countries. Her advice: price your work properly.",
     image: fashion,
+    photoCredit: "illustrate Digital Ug / Pexels",
+    photoSource: "https://www.pexels.com/photo/25406007/",
     date: "Sep 29, 2026",
     youtubeUrl: "https://www.youtube.com/@kura",
   },
@@ -75,6 +87,8 @@ export const stories: Story[] = [
     category: "Career",
     summary: "An agronomy graduate shares what nobody told her about starting an agritech business.",
     image: career,
+    photoCredit: "Fatima Yusuf / Pexels",
+    photoSource: "https://www.pexels.com/photo/30541316/",
     date: "Sep 26, 2026",
   },
 ];
@@ -140,8 +154,8 @@ export function storyBody(s: Story): string[] {
 export function opportunityDetails(o: Opportunity) {
   return {
     about: `${o.organisation} is offering the ${o.title} for motivated young people.`,
-    requirements: [o.eligibility, "Rwandan citizen or resident", "Strong motivation and clear goals", "Updated CV and short motivation letter"],
-    howToApply: "Prepare your documents, complete the online form on the organisation's website, and submit before the deadline. Late applications are not accepted.",
+    requirements: [o.eligibility, "Check the provider’s requirements before preparing your documents. Never pay an unverified application fee."],
+    howToApply: "Confirm the listing on the provider’s official website.",
   };
 }
 export function eventDetails(e: EventItem) {
@@ -207,3 +221,8 @@ export function openOpportunities(items = allOpportunities, now = Date.now()) {
 export const storyNextSteps: Record<string, string> = {
   "aline-code": "irembo-dev", "nurse-musanze": "kla-job", "kitenge-studio": "mtn-intern", "tea-data": "bdf-grant",
 };
+
+export const learningGuides = [
+  { title: "Prepare an application", steps: ["Read the provider’s eligibility and deadline carefully.", "Tailor your CV to the opportunity and check your contact details.", "Gather only the documents requested by the provider.", "Keep a copy of your application and submission confirmation."] },
+  { title: "Check an opportunity safely", steps: ["Confirm the listing on the provider’s official website.", "Never share passwords or banking details in an application.", "Check any requested fee directly with the provider before paying."] },
+];
