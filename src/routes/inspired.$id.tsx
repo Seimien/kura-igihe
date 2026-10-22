@@ -25,6 +25,7 @@ export const Route = createFileRoute("/inspired/$id")({
         { property: "og:title", content: s.title },
         { property: "og:description", content: s.summary },
         { property: "og:type", content: "article" },
+        { name: "twitter:card", content: "summary_large_image" },
       ],
     };
   },
@@ -53,6 +54,7 @@ function StoryPage() {
       </div>
       {s.category === "Health" && <aside className="mt-6 border-y py-4 text-sm text-muted-foreground"><p>{t("Clinical review: not yet supplied")}</p><p className="mt-2">{t("Author, reviewer, sources and last-reviewed date are awaiting editorial confirmation.")}</p><p className="mt-2">{t("These stories are for information, not professional medical advice. Review information is shown when available.")}</p><Link to="/help" className="mt-3 inline-block font-semibold text-primary">{t("Get help")} →</Link></aside>}
       <img src={s.image} alt={t(s.title)} className="mt-8 aspect-[16/10] w-full object-cover object-top" />
+      <p className="mt-2 text-xs text-muted-foreground">{t("Stock photo — illustrative, not the person featured.")} {s.photoSource && <a href={s.photoSource} target="_blank" rel="noopener noreferrer">{t("Photo")}: {s.photoCredit}</a>}</p>
       <div className="mt-8 space-y-5 text-lg leading-relaxed">
         {storyBody(s).map((p, i) => <p key={i}>{t(p)}</p>)}
       </div>
