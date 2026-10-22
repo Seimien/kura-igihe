@@ -23,7 +23,7 @@ describe("Case study opportunity rules", () => {
   });
   it("represents missing deadlines honestly", () => { expect(opportunityStatus("", now)).toBe("No deadline stated"); });
   it("does not verify a sample without source and review evidence", () => {
-    expect(hasVerification({ ...closingSoon, verified: true, sourceUrl: undefined, lastChecked: undefined })).toBe(false);
+    expect(hasVerification({ ...closingSoon, verified: true, sourceUrl: "", lastChecked: "" })).toBe(false);
   });
   it("only hands off to secure external URLs", () => {
     expect(providerUrl("#")).toBeUndefined();

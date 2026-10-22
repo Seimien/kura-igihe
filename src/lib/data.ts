@@ -207,3 +207,8 @@ export function openOpportunities(items = allOpportunities, now = Date.now()) {
 export const storyNextSteps: Record<string, string> = {
   "aline-code": "irembo-dev", "nurse-musanze": "kla-job", "kitenge-studio": "mtn-intern", "tea-data": "bdf-grant",
 };
+
+export const learningGuides = [
+  { title: "Prepare an application", steps: ["Read the provider’s eligibility and deadline carefully.", "Tailor your CV to the opportunity and check your contact details.", "Gather only the documents requested by the provider.", "Keep a copy of your application and submission confirmation."] },
+  { title: "Check an opportunity safely", steps: ["Confirm the listing on the provider’s official website.", "Never share passwords or banking details in an application.", "Check any requested fee directly with the provider before paying."] },
+];

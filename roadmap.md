@@ -1,5 +1,7 @@
 # Case study implementation
 
+- [ ] Replace generated story imagery with licensed stock photographs, preserving current framing.
+
 - [ ] Standardize opportunity summaries, statuses, source freshness and honest trust signals.
 - [ ] Add trusted provider handoff and story-to-action links.
 - [ ] Extend discovery, save persistence, language parity and accessibility without changing the established layout.
