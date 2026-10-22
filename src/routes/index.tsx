@@ -48,21 +48,21 @@ function Hero() {
     const el = ref.current;
     if (el) setSlide(Math.round(el.scrollLeft / el.clientWidth));
   };
-  const go = (i: number) => ref.current?.scrollTo({ left: i * ref.current.clientWidth, behavior: "smooth" });
+  const go = (i: number) => ref.current?.scrollTo({ left: i * ref.current.clientWidth, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
   return (
-    <section id="hero" aria-label="Featured" className="relative flex h-[100svh] min-h-[600px] flex-col overflow-hidden bg-background">
+    <section id="hero" aria-label="Featured" className="relative flex h-[calc(100svh-16px)] min-h-0 flex-col overflow-hidden bg-background">
       {/* central red band — starts below the glass header */}
       <div aria-hidden className="absolute inset-y-0 left-1/3 hidden w-1/3 bg-primary lg:block" />
 
       <div
         ref={ref}
         onScroll={onScroll}
-        className="relative mx-auto flex w-full max-w-[1440px] flex-1 snap-x snap-mandatory overflow-x-auto pt-16 [scrollbar-width:none] lg:grid lg:min-h-0 lg:grid-cols-3 lg:overflow-visible"
+        className="relative mx-auto flex w-full max-w-[1440px] flex-1 snap-x snap-mandatory overflow-x-auto pt-16 [scrollbar-width:none] min-h-0 lg:grid lg:min-h-0 lg:grid-cols-3 lg:overflow-visible"
       >
         {/* LEFT — Brief */}
         <div className="flex w-full shrink-0 snap-center flex-col justify-center px-6 py-8 lg:px-10">
           <p className="label-micro text-primary">KURA</p>
-          <h1 className="mt-4 text-4xl font-extrabold leading-[1.05] tracking-tight text-foreground xl:text-5xl">
+          <h1 className="mt-4 text-4xl font-extrabold leading-[1.05] text-foreground xl:text-5xl">
             {t("The bridge between youth, the future and")}{lang === "EN" ? " " : ""}<span className="text-primary">{t("ambition.")}</span>
           </h1>
           <p className="mt-5 max-w-sm text-base leading-relaxed text-muted-foreground">
@@ -81,7 +81,7 @@ function Hero() {
               alt=""
               width={896}
               height={1152}
-              className="h-full w-full object-cover object-top [mask-image:linear-gradient(to_bottom,black_55%,transparent_100%)]"
+              className="h-full w-full object-cover object-left [mask-image:linear-gradient(to_bottom,black_55%,transparent_100%)]"
             />
           </Link>
           <div className="pointer-events-none relative mt-auto bg-gradient-to-t from-primary via-primary/95 to-transparent px-6 pb-6 pt-20 lg:px-8">
@@ -127,7 +127,6 @@ function Hero() {
             </div>
             <span className="ml-auto text-xs text-muted-foreground" suppressHydrationWarning>{t("Deadline")} {fmtDateL(closingSoon.deadline, lang)}</span>
           </div>
-          <OpportunitySummary opportunity={closingSoon} />
           <div className="mt-5 flex flex-wrap gap-2">
             <Link to="/opportunities/$id" params={{ id: closingSoon.id }} className="bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary/90">{t("Apply")}</Link>
             <SaveButton item={{ id: closingSoon.id, kind: "opportunity", title: closingSoon.title, meta: closingSoon.type }} />

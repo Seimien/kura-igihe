@@ -24,6 +24,7 @@ export const Route = createFileRoute("/events/$id")({
       { property: "og:type", content: "website" },
         { title: `${e.title} | KURA Events` },
         { name: "description", content: d },
+        { name: "twitter:card", content: "summary_large_image" },
         { property: "og:title", content: e.title },
         { property: "og:description", content: d },
       ],

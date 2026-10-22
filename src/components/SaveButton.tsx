@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { Bookmark } from "lucide-react";
 import { useApp, type SavedItem } from "@/lib/store";
 import { useT } from "@/lib/i18n";
@@ -8,7 +9,7 @@ export function SaveButton({ item, className, label = true }: { item: SavedItem;
   const on = isSaved(item.id);
   const t = useT();
   return (
-    <button
+    <Button variant="outline"
       type="button"
       onClick={() => toggleSave(item)}
       aria-pressed={on}
@@ -21,6 +22,6 @@ export function SaveButton({ item, className, label = true }: { item: SavedItem;
     >
       <Bookmark className={cn("h-4 w-4", on && "fill-current")} />
       {label && (on ? t("Saved") : t("Save"))}
-    </button>
+    </Button>
   );
 }

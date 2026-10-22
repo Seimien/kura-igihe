@@ -101,3 +101,10 @@
   letter-spacing: 0;
   text-transform: uppercase;
 }
+
+@media (max-height: 650px) {
+  #hero h1 { font-size: 1.75rem; line-height: 1.12; }
+  #hero h2 { font-size: 1.25rem; }
+  #hero p { font-size: 0.8rem; }
+  #hero aside, #hero > div > div { padding-top: 1rem; padding-bottom: 1rem; }
+}
